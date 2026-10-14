@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="ESP32 Storage Diary: an offline personal diary using an ESP32, ST7735 TFT, physical buttons, LittleFS, and a local web editor.">
+  <title>ESP32 Storage Diary</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b1020;--panel:#121a2c;--text:#edf2ff;--muted:#aab6d3;--accent:#70e1d1;--line:#26324b;--blue:#91a8ff}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#182849 0,transparent 40%),var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:var(--accent)}.wrap{width:min(1080px,92%);margin:auto}.top{padding:22px 0;border-bottom:1px solid var(--line)}.brand{font-weight:800;letter-spacing:.04em}.hero{padding:76px 0 54px}.eyebrow{color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.16em;font-size:.78rem}.hero h1{font-size:clamp(2.5rem,7vw,5rem);line-height:1.02;letter-spacing:-.045em;margin:16px 0}.hero p{max-width:700px;color:var(--muted);font-size:1.15rem}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{display:inline-block;padding:12px 18px;border-radius:10px;border:1px solid var(--line);font-weight:750;text-decoration:none}.primary{background:var(--accent);color:#06121b;border-color:var(--accent)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:28px 0 52px}.card{padding:22px;background:linear-gradient(160deg,#151f35,var(--panel));border:1px solid var(--line);border-radius:16px}.card h3{margin-top:0}.card p,.muted{color:var(--muted)}section{padding:22px 0 34px}h2{font-size:clamp(1.6rem,4vw,2.3rem);letter-spacing:-.025em}table{border-collapse:collapse;width:100%;margin:18px 0}th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line)}th{color:var(--accent)}code,pre{background:#080d18;border:1px solid var(--line);border-radius:8px}code{padding:.15em .4em}pre{padding:16px;overflow:auto}.notice{padding:16px;border-left:3px solid var(--accent);background:#111b2b;border-radius:0 10px 10px 0}.foot{padding:30px 0 48px;border-top:1px solid var(--line);color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header class="top"><div class="wrap brand">ESP32 / STORAGE DIARY</div></header>
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Embedded project · Offline-first</div>
+      <h1>Your notes.<br>On your own device.</h1>
+      <p>A compact diary built with an ESP32, an ST7735 TFT display, three physical buttons, and LittleFS internal flash. Write entries from a phone or laptop through a local web page, even without an internet connection.</p>
+      <div class="actions"><a class="btn primary" href="Storage_Diary_Final_Code_ESP32_3_3_3.ino">Get the Arduino sketch</a><a class="btn" href="README.md">Read setup instructions</a><a class="btn" href="https://github.com/">Host on GitHub</a></div>
+    </section>
+    <section aria-labelledby="features"><h2 id="features">Built for a small, self-contained diary</h2>
+      <div class="grid">
+        <article class="card"><h3>Local web editor</h3><p>Connect to the ESP32's Wi-Fi access point and write entries in a browser. No cloud account or router is required.</p></article>
+        <article class="card"><h3>Internal flash storage</h3><p>LittleFS saves entries on the ESP32, so this version does not need a microSD card.</p></article>
+        <article class="card"><h3>900 note IDs</h3><p>Browse IDs 0–899 in groups of 50 on the web interface. Real capacity depends on available flash space and entry sizes.</p></article>
+        <article class="card"><h3>Physical controls</h3><p>Three buttons provide note browsing, reading, page navigation, and delete confirmation on the TFT.</p></article>
+      </div>
+    </section>
+    <section id="setup"><h2>Quick start</h2><ol>
+      <li>Install <strong>esp32 by Espressif Systems 3.3.3</strong> in Arduino IDE.</li>
+      <li>Install <strong>Adafruit GFX Library</strong> and <strong>Adafruit ST7735 and ST7789 Library</strong>.</li>
+      <li>Open <a href="Storage_Diary_Final_Code_ESP32_3_3_3.ino">the sketch</a>, select the correct ESP32 board and a partition scheme with a compatible filesystem partition, then compile and upload.</li>
+      <li>Open Serial Monitor at <code>115200</code> baud. Confirm LittleFS mounts successfully.</li>
+      <li>Connect to Wi-Fi <code>ESP32-Diary</code>, password <code>12345678</code>, and visit <code>http://192.168.4.1</code>.</li>
+    </ol><p class="notice"><strong>Storage warning:</strong> If LittleFS fails to mount, the sketch does not automatically format it. Check the partition setup first. A deliberate format erases saved notes.</p></section>
+    <section id="wiring"><h2>Hardware wiring</h2><h3>ST7735 TFT</h3><table><thead><tr><th>Display signal</th><th>ESP32 GPIO</th></tr></thead><tbody><tr><td>SCK / CLK</td><td>18</td></tr><tr><td>MOSI / SDA</td><td>23</td></tr><tr><td>CS</td><td>21</td></tr><tr><td>DC / A0</td><td>22</td></tr><tr><td>RST</td><td>Not connected in this sketch</td></tr></tbody></table><h3>Buttons</h3><table><thead><tr><th>Button</th><th>ESP32 GPIO</th></tr></thead><tbody><tr><td>Left</td><td>25</td></tr><tr><td>Select / middle</td><td>26</td></tr><tr><td>Right</td><td>4</td></tr></tbody></table><p class="muted">Buttons use INPUT_PULLDOWN and active-HIGH logic: connect each button between its GPIO and 3.3 V. Share GND. Confirm your TFT module's voltage requirements before powering it.</p></section>
+    <section id="limits"><h2>Project notes</h2><ul><li>Title limit: 48 characters.</li><li>Body limit: 800 characters.</li><li>The TFT caches the newest 10 notes in RAM to reduce memory use.</li><li>900 IDs are available in the file naming scheme, but 900 long notes may not fit in flash.</li><li>This project targets ESP32 Arduino core 3.3.3; compile and test on your own hardware before relying on it.</li></ul></section>
+    <section><h2>Repository files</h2><p><a href="README.md">README and full setup guide</a><br><a href="Storage_Diary_Final_Code_ESP32_3_3_3.ino">Arduino firmware (.ino)</a><br><a href="index.html">GitHub Pages project page</a></p></section>
+  </main>
+  <footer class="foot"><div class="wrap">ESP32 Storage Diary · An offline embedded-systems project. Replace the default access-point password before sharing the device in an untrusted environment.</div></footer>
+</body>
+</html>
